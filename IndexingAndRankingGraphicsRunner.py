@@ -50,8 +50,8 @@ def draw_web():
             p2x = manager.page_nodes[link].xPos
             p2y = manager.page_nodes[link].yPos
 
-            x_sign = sign(p2x-page.xPos)
-            y_sign = sign(p2y-page.yPos)
+            x_sign = sign(p2x-page.xPos) * (abs(p2x-page.xPos) > 2 * BOX_HALF_SIZE)
+            y_sign = sign(p2y-page.yPos) * (abs(p2y-page.yPos) > 2 * BOX_HALF_SIZE)
 
             p1x = page.xPos + x_sign * BOX_HALF_SIZE
             p1y = page.yPos + y_sign * BOX_HALF_SIZE
