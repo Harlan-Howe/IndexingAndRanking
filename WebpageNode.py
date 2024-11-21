@@ -4,7 +4,8 @@ import tkinter as tk
 BOX_HALF_SIZE = 15
 PERCENTAGE_RANK_TO_COLOR_MULTIPLIER = 1000
 
-def rgb_to_color(r:int, g:int, b:int) -> str:
+
+def rgb_to_color(r: int, g: int, b: int) -> str:
     """
     converts rgb (0-255) values to a hex code, which is what tkinter uses for colors.
     :param r:  red (0-255)
@@ -13,6 +14,7 @@ def rgb_to_color(r:int, g:int, b:int) -> str:
     :return: a hex code in format #rrggbb
     """
     return f"#{r:02x}{g:02x}{b:02x}"
+
 
 class WebpageNode:
 
@@ -54,15 +56,16 @@ class WebpageNode:
                                                    self.xPos + BOX_HALF_SIZE, self.yPos + BOX_HALF_SIZE,
                                                    outline="black", fill=self.color, width=2)
         if self.text_id is None:
-            canvas.create_text(self.xPos-1, self.yPos-1, text=f"{self.id_num}", fill="lightgrey", font=("Arial 12 bold"))
-            self.text_id = canvas.create_text(self.xPos, self.yPos, text=f"{self.id_num}", fill="black", font=("Arial 12 bold"))
+            canvas.create_text(self.xPos-1, self.yPos-1, text=f"{self.id_num}", fill="lightgrey", font="Arial 12 bold")
+            self.text_id = canvas.create_text(self.xPos, self.yPos, text=f"{self.id_num}", fill="black",
+                                              font="Arial 12 bold")
 
-    def recalculate_rank(self, total_steps_taken:int) -> None:
+    def recalculate_rank(self, total_steps_taken: int) -> None:
         self.rank = self.num_page_visits / total_steps_taken
 
     def update_color_for_rank(self, canvas: tk.Canvas) -> None:
-        color_val = int(min(255, max(0, self.rank * PERCENTAGE_RANK_TO_COLOR_MULTIPLIER)))
-        self.reset_rect_color(canvas, rgb_to_color(color_val,255-color_val,0))
+        color_val = min(255, max(0, int(self.rank * PERCENTAGE_RANK_TO_COLOR_MULTIPLIER)))
+        self.reset_rect_color(canvas, rgb_to_color(color_val, 255 - color_val, 0))
 
     def reset_rect_color(self, canvas: tk.Canvas, color: str) -> None:
         self.color = color
