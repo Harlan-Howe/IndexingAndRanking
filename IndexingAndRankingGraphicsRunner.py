@@ -46,7 +46,7 @@ class IndexingAndRankingGraphicsRunner():
         self.search_bar.bind("<Return>", self.search)
         self.search_bar.pack(side=LEFT)
 
-        self.text_area = scrolledtext.ScrolledText(self.window, width=100, height=6) # height is in lines, so adjust as needed
+        self.text_area = scrolledtext.ScrolledText(self.window, width=100, height=8) # height is in lines, so adjust as needed
         self.text_area.pack()
 
         self.draw_web()
