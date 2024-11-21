@@ -8,6 +8,7 @@ from tkinter import scrolledtext, Frame, X, Label, LEFT
 
 from PageManager import PageManager
 from WebpageNode import BOX_HALF_SIZE
+from WebpageNode import rgb_to_color
 
 ITERATION_REPORT_FREQUENCY = 50  # how often should we print that we are making progress on the PageRank iterations
 
@@ -120,7 +121,7 @@ class IndexingAndRankingGraphicsRunner:
                 p2x -= x_sign * BOX_HALF_SIZE
                 p2y -= y_sign * BOX_HALF_SIZE
 
-                line_color = self.rgb_to_color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+                line_color = rgb_to_color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
                 # calculate information needed to draw the arrowhead for this line.
                 line_length = sqrt(pow(p1x-p2x, 2) + pow(p1y-p2y, 2))
@@ -154,16 +155,6 @@ class IndexingAndRankingGraphicsRunner:
         self.canvas.coords(self.selection_circle, [p[0]-BOX_HALF_SIZE * 1.5, p[1]-BOX_HALF_SIZE * 1.5,
                                                    p[0]+BOX_HALF_SIZE*1.5, p[1]+BOX_HALF_SIZE*1.5])
 
-    @staticmethod
-    def rgb_to_color(r: int, g: int, b: int) -> str:
-        """
-        converts rgb (0-255) values to a hex code, which is what tkinter uses for colors.
-        :param r:  red (0-255)
-        :param g:  green (0-255)
-        :param b:  blue (0-255)
-        :return: a hex code in format #rrggbb
-        """
-        return f"#{r:02x}{g:02x}{b:02x}"
 
 
 if __name__ == "__main__":
