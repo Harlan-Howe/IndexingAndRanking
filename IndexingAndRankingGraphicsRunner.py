@@ -17,6 +17,13 @@ NUM_ITERATIONS_TO_PERFORM:int = 1000
 class IndexingAndRankingGraphicsRunner():
     def search(self, event):
         print("Searching for: ", self.search_bar.get())
+        page_num = self.manager.find_best_match(self.search_bar.get())
+        self.set_selection(page_num)
+        self.text_area.delete("1.0", tk.END)
+        if 0 <= page_num < self.manager.num_pages:
+            self.text_area.insert(tk.INSERT, f"{self.manager.page_nodes[page_num].title()}\n\n{self.manager.page_nodes[page_num].body()}")
+        else:
+            self.text_area.insert(tk.INSERT, "Not Found.")
 
     def __init__(self):
 
