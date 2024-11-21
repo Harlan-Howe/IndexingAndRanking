@@ -30,13 +30,7 @@ class IndexingAndRankingGraphicsRunner:
         page_num = self.manager.find_best_match(self.search_bar.get())
 
         self.set_selection(page_num)  # circle the page in the graphics canvas
-        self.text_area.delete("1.0", tk.END)  # clear the text area
 
-        if 0 <= page_num < self.manager.num_pages:  # update the text area.
-            self.text_area.insert(tk.INSERT, f"{self.manager.page_nodes[page_num].title()}\n\n"
-                                             f"{self.manager.page_nodes[page_num].body()}")
-        else:
-            self.text_area.insert(tk.INSERT, "Not Found.")
 
     def __init__(self):
         self.num_iterations_to_go: int = NUM_ITERATIONS_TO_PERFORM
@@ -141,10 +135,12 @@ class IndexingAndRankingGraphicsRunner:
         self.selection_circle = self.canvas.create_oval(-200-BOX_HALF_SIZE * 1.5, -200-BOX_HALF_SIZE * 1.5,
                                                         -200+BOX_HALF_SIZE * 1.5, -200+BOX_HALF_SIZE * 1.5,
                                                         outline="blue", width=2)
+        self.set_selection(-1)
 
     def set_selection(self, which_page: int) -> None:
         """
-        move the selection circle to circumscribe the selected page, or off-screen if which_page is out of range.
+        moves the selection circle to circumscribe the selected page, or off-screen if which_page is out of range. Also
+        updates the text area to reflect the content of the selected page.
         :param which_page: the id of the page to circumscribe
         :return: None
         """
@@ -154,7 +150,14 @@ class IndexingAndRankingGraphicsRunner:
             p = (self.manager.page_nodes[which_page].xPos, self.manager.page_nodes[which_page].yPos)
         self.canvas.coords(self.selection_circle, [p[0]-BOX_HALF_SIZE * 1.5, p[1]-BOX_HALF_SIZE * 1.5,
                                                    p[0]+BOX_HALF_SIZE*1.5, p[1]+BOX_HALF_SIZE*1.5])
+        self.text_area.delete("1.0", tk.END)  # clear the text area
 
+        if 0 <= which_page < self.manager.num_pages:  # update the text area.
+            self.text_area.insert(tk.INSERT, f"Rank: {100*self.manager.page_nodes[which_page].rank:3.2f}%\n"
+                                             f"{self.manager.page_nodes[which_page].title()}\n\n"
+                                             f"{self.manager.page_nodes[which_page].body()}")
+        else:
+            self.text_area.insert(tk.INSERT, "Not Found.")
 
 
 if __name__ == "__main__":
