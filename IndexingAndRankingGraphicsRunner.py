@@ -35,8 +35,8 @@ class IndexingAndRankingGraphicsRunner():
         self.search_bar.bind("<Return>", self.search)
         self.search_bar.pack(side=LEFT)
 
-        text_area = scrolledtext.ScrolledText(self.window, width=100, height=6) # height is in lines, so adjust as needed
-        text_area.pack()
+        self.text_area = scrolledtext.ScrolledText(self.window, width=100, height=6) # height is in lines, so adjust as needed
+        self.text_area.pack()
 
         self.draw_web()
 
@@ -90,6 +90,12 @@ class IndexingAndRankingGraphicsRunner():
                                    p2y-ARROW_SIZE*(unit_vector_along_line[1]-unit_vector_normal[1]),
                                    p2x, p2y,
                                    fill=line_color, width=1)
+        self.selection_circle = self.canvas.create_oval(-200-BOX_HALF_SIZE * 1.5, -200-BOX_HALF_SIZE * 1.5,
+                                                        -200+BOX_HALF_SIZE * 1.5,- 200+BOX_HALF_SIZE * 1.5,
+                                                        outline="blue", width=2)
+
+
+
 
     def rgb_to_color(self, r:int, g:int, b:int) -> str:
         """
