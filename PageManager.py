@@ -1,5 +1,6 @@
 import random
 from typing import List, Tuple
+import tkinter as tk
 
 from WebpageNode import WebpageNode, BOX_HALF_SIZE
 
@@ -10,7 +11,8 @@ class PageManager:
 
     def __init__(self):
         self.page_nodes: List[WebpageNode] = []
-        self.num_pages = 0
+        self.num_pages: int = 0
+        self.total_steps_taken: int = 0
         # self.page_index: <insert type here> = <insert initially empty structure here>
         self.load_pages()
 
@@ -86,6 +88,21 @@ class PageManager:
         """
         pass
 
-
-
         return []
+
+    def iterate_page_rank(self, canvas: tk.Canvas) -> None:
+
+        which_to_iterate = 2 * random.randint(0, int(self.num_pages / 2))
+        self.page_nodes[which_to_iterate].num_page_visits += 1
+        self.total_steps_taken += 1
+
+        self.recalculate_ranks_from_page_visits()
+        self.update_colors(canvas)
+
+    def recalculate_ranks_from_page_visits(self) -> None:
+        for p in self.page_nodes:
+            p.recalculate_rank(self.total_steps_taken)
+
+    def update_colors(self, canvas: tk.Canvas) -> None:
+        for p in self.page_nodes:
+            p.update_color_for_rank(canvas)
