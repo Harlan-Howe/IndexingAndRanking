@@ -8,6 +8,7 @@ from tkinter import scrolledtext, Frame, X, Label, LEFT
 from PageManager import PageManager
 from WebpageNode import BOX_HALF_SIZE
 
+ITERATION_REPORT_FREQUENCY = 50
 
 ARROW_SIZE: int = 5
 BREAK_BETWEEN_ITERATIONS: int = 20
@@ -56,7 +57,7 @@ class IndexingAndRankingGraphicsRunner():
         self.window.mainloop()
 
     def iterate_ranking(self):
-        if self.num_iterations_to_go % 50 == 0:
+        if self.num_iterations_to_go % ITERATION_REPORT_FREQUENCY == 0:
             print(f"{self.num_iterations_to_go=}")
         if self.num_iterations_to_go > 0:
             self.num_iterations_to_go -= 1
