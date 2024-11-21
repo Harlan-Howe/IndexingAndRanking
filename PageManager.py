@@ -92,7 +92,7 @@ class PageManager:
 
     def iterate_page_rank(self, canvas: tk.Canvas) -> None:
 
-        which_to_iterate = 2 * random.randint(0, int(self.num_pages / 2))
+        which_to_iterate = 2 * random.randint(0, int((self.num_pages-1) / 2))
         self.page_nodes[which_to_iterate].num_page_visits += 1
         self.total_steps_taken += 1
 
