@@ -2,7 +2,7 @@ from typing import List, Optional
 import tkinter as tk
 
 BOX_HALF_SIZE = 15
-PERCENTAGE_RANK_TO_COLOR_MULTIPLIER = 1000
+PERCENTAGE_RANK_TO_COLOR_MULTIPLIER = 5000
 
 
 def rgb_to_color(r: int, g: int, b: int) -> str:
@@ -65,7 +65,7 @@ class WebpageNode:
 
     def update_color_for_rank(self, canvas: tk.Canvas) -> None:
         color_val = min(255, max(0, int(self.rank * PERCENTAGE_RANK_TO_COLOR_MULTIPLIER)))
-        self.reset_rect_color(canvas, rgb_to_color(color_val, 255 - color_val, 0))
+        self.reset_rect_color(canvas, rgb_to_color(255-color_val, color_val, 0))
 
     def reset_rect_color(self, canvas: tk.Canvas, color: str) -> None:
         self.color = color
