@@ -8,8 +8,11 @@ from tkinter import scrolledtext, Frame, X, Label, LEFT
 from PageManager import PageManager
 from WebpageNode import BOX_HALF_SIZE
 
-ARROW_SIZE = 5
-BREAK_BETWEEN_ITERATIONS = 20
+
+ARROW_SIZE: int = 5
+BREAK_BETWEEN_ITERATIONS: int = 20
+NUM_ITERATIONS_TO_PERFORM:int = 1000
+
 
 class IndexingAndRankingGraphicsRunner():
     def search(self, event):
@@ -19,7 +22,8 @@ class IndexingAndRankingGraphicsRunner():
 
         self.manager = PageManager()
         self.manager.build_index()
-        self.num_iterations_to_go = 1000
+        self.num_iterations_to_go: int = NUM_ITERATIONS_TO_PERFORM
+        self.selection_circle: int = -1
 
         self.window = tk.Tk()
         self.window.geometry('800x800')
@@ -94,8 +98,12 @@ class IndexingAndRankingGraphicsRunner():
                                                         -200+BOX_HALF_SIZE * 1.5,- 200+BOX_HALF_SIZE * 1.5,
                                                         outline="blue", width=2)
 
-
-
+    def set_selection(self, which_page:int):
+        p = (-200,-200)
+        if 0 <= which_page < self.manager.num_pages:
+            p = (self.manager.page_nodes[which_page].xPos, self.manager.page_nodes[which_page].yPos)
+        self.canvas.coords(self.selection_circle, [p[0]-BOX_HALF_SIZE * 1.5, p[1]-BOX_HALF_SIZE * 1.5,
+                               p[0]+BOX_HALF_SIZE*1.5, p[1]+BOX_HALF_SIZE*1.5])
 
     def rgb_to_color(self, r:int, g:int, b:int) -> str:
         """
@@ -106,6 +114,7 @@ class IndexingAndRankingGraphicsRunner():
         :return: a hex code in format #rrggbb
         """
         return f"#{r:02x}{g:02x}{b:02x}"
+
 
 if __name__ == "__main__":
     app = IndexingAndRankingGraphicsRunner()
