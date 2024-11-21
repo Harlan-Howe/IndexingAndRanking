@@ -9,49 +9,57 @@ from PageManager import PageManager
 from WebpageNode import BOX_HALF_SIZE
 
 ARROW_SIZE = 5
+BREAK_BETWEEN_ITERATIONS = 500
+
 class IndexingAndRankingGraphicsRunner():
     def search(self, event):
-        print("Searching for: ", search_bar.get())
+        print("Searching for: ", self.search_bar.get())
 
-    def main(self):
-        global search_bar, manager, canvas
+    def __init__(self):
 
-        manager = PageManager()
-        manager.build_index()
+        self.manager = PageManager()
+        self.manager.build_index()
+        self.num_iterations_to_go = 1000
 
+        self.window = tk.Tk()
+        self.window.geometry('800x800')
 
+        self.canvas = tk.Canvas(self.window, width=800, height=600)
+        self.canvas.pack()
 
-        window = tk.Tk()
-        window.geometry('800x800')
-
-        canvas = tk.Canvas(window, width=800, height=600)
-        canvas.pack()
-
-        search_frame = Frame(window)
+        search_frame = Frame(self.window)
         search_frame.pack(fill=X)
         search_label = Label(search_frame, text="Search for:", width=11)
         search_label.pack(side=LEFT, padx=5, pady=5)
-        search_bar = tk.Entry(search_frame, width=50)
-        search_bar.bind("<Return>", self.search)
-        search_bar.pack(side=LEFT)
+        self.search_bar = tk.Entry(search_frame, width=50)
+        self.search_bar.bind("<Return>", self.search)
+        self.search_bar.pack(side=LEFT)
 
-        text_area = scrolledtext.ScrolledText(window, width=100, height=6) # height is in lines, so adjust as needed
+        text_area = scrolledtext.ScrolledText(self.window, width=100, height=6) # height is in lines, so adjust as needed
         text_area.pack()
 
         self.draw_web()
 
-        window.mainloop()
+        self.window.after(BREAK_BETWEEN_ITERATIONS, self.iterate_ranking)
+
+        self.window.mainloop()
+
+    def iterate_ranking(self):
+        if self.num_iterations_to_go > 0:
+            self.num_iterations_to_go -= 1
+            self.manager.iterate_page_rank(self.canvas)
+            self.window.after(BREAK_BETWEEN_ITERATIONS, self.iterate_ranking)
 
     def draw_web(self):
-        for page in manager.page_nodes:
-            page.draw_self(canvas)
+        for page in self.manager.page_nodes:
+            page.draw_self(self.canvas)
 
-        for page in manager.page_nodes:
+        for page in self.manager.page_nodes:
             if page.xPos == 0:
                 print(page)
             for link in page.links:
-                p2x = manager.page_nodes[link].xPos
-                p2y = manager.page_nodes[link].yPos
+                p2x = self.manager.page_nodes[link].xPos
+                p2y = self.manager.page_nodes[link].yPos
 
                 x_sign = sign(p2x-page.xPos) * (abs(p2x-page.xPos) > 2 * BOX_HALF_SIZE)
                 y_sign = sign(p2y-page.yPos) * (abs(p2y-page.yPos) > 2 * BOX_HALF_SIZE)
@@ -64,14 +72,14 @@ class IndexingAndRankingGraphicsRunner():
 
                 line_color = self.rgb_to_color(random.randint(0,255),random.randint(0,255),random.randint(0,255))
 
-                canvas.create_line(p1x, p1y, p2x, p2y, fill=line_color, width=1)
+                self.canvas.create_line(p1x, p1y, p2x, p2y, fill=line_color, width=1)
 
                 line_length = sqrt(pow(p1x-p2x,2) + pow(p1y-p2y,2))
 
                 unit_vector_along_line = ((p2x-p1x)/line_length, (p2y-p1y)/line_length)
                 unit_vector_normal = (-unit_vector_along_line[1], unit_vector_along_line[0])
 
-                canvas.create_line(p2x, p2y,
+                self.canvas.create_line(p2x, p2y,
                                    p2x-ARROW_SIZE*(unit_vector_along_line[0]+unit_vector_normal[0]),
                                    p2y-ARROW_SIZE*(unit_vector_along_line[1]+unit_vector_normal[1]),
                                    p2x-ARROW_SIZE*(unit_vector_along_line[0]-unit_vector_normal[0]),
@@ -91,4 +99,3 @@ class IndexingAndRankingGraphicsRunner():
 
 if __name__ == "__main__":
     app = IndexingAndRankingGraphicsRunner()
-    app.main()
