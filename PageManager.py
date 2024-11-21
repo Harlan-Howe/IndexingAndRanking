@@ -90,6 +90,15 @@ class PageManager:
 
         return []
 
+    def find_best_match(self, target: str) -> int:
+        """
+        finds the id of the highest ranked page with a match for the target term.
+        :param target: string to search for
+        :return: the id of the best page found, or -1 if nothing found.
+        """
+
+        return -1
+
     def iterate_page_rank(self, canvas: tk.Canvas) -> None:
 
         which_to_iterate = 2 * random.randint(0, int((self.num_pages-1) / 2))
