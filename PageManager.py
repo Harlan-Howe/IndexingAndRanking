@@ -10,6 +10,7 @@ class PageManager:
 
     def __init__(self):
         self.page_nodes: List[WebpageNode] = []
+        self.num_pages = 0
         # self.page_index: <insert type here> = <insert initially empty structure here>
         self.load_pages()
 
@@ -25,7 +26,7 @@ class PageManager:
 
         with open("webpages.txt", mode="r") as pagesFile:
             for line in pagesFile:
-                num_links = random.randint(1, 3)
+                num_links = random.randint(2, 8)
                 links: List[int] = []
                 for i in range(num_links):
                     link_to = random.randint(0, 49)
@@ -50,6 +51,24 @@ class PageManager:
                                                    links=links))
                 # print(self.page_nodes[-1])  # optional for status check that pages are loading.
                 id_counter += 1
+        self.purge_links()
+        self.num_pages = len(self.page_nodes)
+
+    def purge_links(self) -> None:
+        """
+        A little bit of behind-the-scenes magic to remove some of the excess links that are spatially far away, to make
+        the graphics look a bit nicer,with fewer loooong lines.
+        :return: None
+        """
+        for p in self.page_nodes:
+            for i in range(len(p.links) - 1, -1, -1):
+                # Probabilistically remove lines that are longer
+                if random.random() < (abs(p.xPos - self.page_nodes[p.links[i]].xPos) + abs(
+                        p.yPos - self.page_nodes[p.links[i]].yPos)) / 800:
+                    del (p.links[i])
+                # but don't remove any page's last link.
+                if len(p.links) == 1:
+                    break
 
     def build_index(self) -> None:
         """
@@ -66,5 +85,7 @@ class PageManager:
         :return: a list of (page_id, [word locs]) where the word can be found.
         """
         pass
+
+
 
         return []
