@@ -9,7 +9,7 @@ from PageManager import PageManager
 from WebpageNode import BOX_HALF_SIZE
 
 ARROW_SIZE = 5
-BREAK_BETWEEN_ITERATIONS = 500
+BREAK_BETWEEN_ITERATIONS = 20
 
 class IndexingAndRankingGraphicsRunner():
     def search(self, event):
@@ -45,10 +45,14 @@ class IndexingAndRankingGraphicsRunner():
         self.window.mainloop()
 
     def iterate_ranking(self):
+        if self.num_iterations_to_go % 50 == 0:
+            print(f"{self.num_iterations_to_go=}")
         if self.num_iterations_to_go > 0:
             self.num_iterations_to_go -= 1
             self.manager.iterate_page_rank(self.canvas)
             self.window.after(BREAK_BETWEEN_ITERATIONS, self.iterate_ranking)
+        else:
+            print("Done iterating PageRank.")
 
     def draw_web(self):
         for page in self.manager.page_nodes:
