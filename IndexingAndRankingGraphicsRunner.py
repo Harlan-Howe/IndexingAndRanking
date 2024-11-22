@@ -20,16 +20,6 @@ NUM_ITERATIONS_TO_PERFORM: int = 1000  # how many times to call the iterate_rank
 
 
 class IndexingAndRankingGraphicsRunner:
-    def search(self, event) -> None:
-        """
-        event handler that gets called when the user hits return in the search bar.
-        :param event: info about the event, which we aren't using.
-        :return: None
-        """
-        print("Searching for: ", self.search_bar.get())
-        page_num = self.manager.find_best_match(self.search_bar.get())
-
-        self.set_selection(page_num)  # circle the page in the graphics canvas
 
 
     def __init__(self):
@@ -58,6 +48,7 @@ class IndexingAndRankingGraphicsRunner:
         self.window.geometry('800x800')
         self.canvas = tk.Canvas(self.window, width=800, height=600)  # Note: a bit shorter (vertically) than the window.
         self.canvas.pack()
+        self.canvas.bind("<Button-1>", self.handle_click)
         search_frame = Frame(self.window)
         search_frame.pack(fill=X)
         search_label = Label(search_frame, text="Search for:", width=11)
@@ -68,6 +59,7 @@ class IndexingAndRankingGraphicsRunner:
         self.text_area = scrolledtext.ScrolledText(self.window, width=100,
                                                    height=8)  # height is in lines, so adjust as needed
         self.text_area.pack()
+
 
     def iterate_ranking(self) -> None:
         """
@@ -134,7 +126,7 @@ class IndexingAndRankingGraphicsRunner:
         #  create a circle that can be used to indicate which page is selected.
         self.selection_circle = self.canvas.create_oval(-200-BOX_HALF_SIZE * 1.5, -200-BOX_HALF_SIZE * 1.5,
                                                         -200+BOX_HALF_SIZE * 1.5, -200+BOX_HALF_SIZE * 1.5,
-                                                        outline="blue", width=2)
+                                                        outline="blue", width=4)
         self.set_selection(-1)
 
     def set_selection(self, which_page: int) -> None:
@@ -157,7 +149,26 @@ class IndexingAndRankingGraphicsRunner:
                                              f"{self.manager.page_nodes[which_page].title()}\n\n"
                                              f"{self.manager.page_nodes[which_page].body()}")
         else:
-            self.text_area.insert(tk.INSERT, "Not Found.")
+            self.text_area.insert(tk.INSERT, "No Page Selected.")
+
+    def search(self, event) -> None:
+        """
+        event handler that gets called when the user hits return in the search bar.
+        :param event: info about the event, which we aren't using.
+        :return: None
+        """
+        print("Searching for: ", self.search_bar.get())
+        page_num = self.manager.find_best_match(self.search_bar.get())
+
+        self.set_selection(page_num)  # circle the page in the graphics canvas
+
+    def handle_click(self, event) -> None:
+        for i in range(0,self.manager.num_pages):
+            if abs(event.x-self.manager.page_nodes[i].xPos) < BOX_HALF_SIZE and\
+                    abs(event.y-self.manager.page_nodes[i].yPos) < BOX_HALF_SIZE:
+                self.set_selection(i)
+                return
+        self.set_selection(-1)
 
 
 if __name__ == "__main__":
