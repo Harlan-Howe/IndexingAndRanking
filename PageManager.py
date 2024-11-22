@@ -13,6 +13,7 @@ class PageManager:
         self.page_nodes: List[WebpageNode] = []
         self.num_pages: int = 0
         self.total_steps_taken: int = 0
+        # TODO #0: Select a data structure that will serve as your index of words on these pages.
         # self.page_index: <insert type here> = <insert initially empty structure here>
         self.load_pages()
 
@@ -78,6 +79,8 @@ class PageManager:
         list of webpages, ignoring any words in the words_to_ignore list.
         :return: None
         """
+        # TODO #1: You write this method. You can uncomment line 8 in the Text runner to see whether this looks
+        #  like you expect it to.
         pass
 
     def search_for_word(self, target: str) -> List[Tuple[int, List[int]]]:
@@ -86,9 +89,23 @@ class PageManager:
         :param target: word to find
         :return: a list of (page_id, [word locs]) where the word can be found.
         """
+        # TODO #2: You write this method. You can use the remainder of the text runner to check whether this is working.
         pass
 
         return []
+    # --------------------------------------------------------------- Part 2 PageRank & Graphics
+    def iterate_page_rank(self, canvas: tk.Canvas) -> None:
+
+        # TODO #3: replace this dummy code with your code to implement the random surfer PageRank algorithm.
+        # currently, this code just ups the page visits of the even numbered pages.
+        which_to_iterate = 2 * random.randint(0, int((self.num_pages-1) / 2))
+        self.page_nodes[which_to_iterate].num_page_visits += 1
+        self.total_steps_taken += 1
+        # end dummy code
+
+
+        self.recalculate_ranks_from_page_visits()
+        self.update_colors(canvas)
 
     def find_best_match(self, target: str) -> int:
         """
@@ -96,17 +113,8 @@ class PageManager:
         :param target: string to search for
         :return: the id of the best page found, or -1 if nothing found.
         """
-
+        # TODO #4: using what you have written so far, combine these ideas to write this method.
         return -1
-
-    def iterate_page_rank(self, canvas: tk.Canvas) -> None:
-
-        which_to_iterate = 2 * random.randint(0, int((self.num_pages-1) / 2))
-        self.page_nodes[which_to_iterate].num_page_visits += 1
-        self.total_steps_taken += 1
-
-        self.recalculate_ranks_from_page_visits()
-        self.update_colors(canvas)
 
     def recalculate_ranks_from_page_visits(self) -> None:
         for p in self.page_nodes:
