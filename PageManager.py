@@ -95,13 +95,24 @@ class PageManager:
         return []
     # --------------------------------------------------------------- Part 2 PageRank & Graphics
     def iterate_page_rank(self, canvas: tk.Canvas) -> None:
+        """
+        EITHER
+        a) represents one step in the random surf... 85% chance of picking from the current page's links or
+        15% chance of jumping to a random page (requires a class variable to keep track of current page id)
+        OR
+        b) represents a chain of steps as the 85%/15% description above, _until_ the jump.
+        (PROGRAMMER'S CHOICE)
 
+        :param canvas: The drawing area of the window that will be updated after this iteration.
+        :return: None
+        """
         # TODO #3: replace this dummy code with your code to implement the random surfer PageRank algorithm.
+        # start dummy code -----------------------
         # currently, this code just ups the page visits of the even numbered pages.
         which_to_iterate = 2 * random.randint(0, int((self.num_pages-1) / 2))
         self.page_nodes[which_to_iterate].num_page_visits += 1
         self.total_steps_taken += 1
-        # end dummy code
+        # end dummy code -------------------------
 
 
         self.recalculate_ranks_from_page_visits()
