@@ -5,6 +5,7 @@ from PageManager import PageManager
 if __name__ == "__main__":
     manager = PageManager()
     manager.build_index()
+    # print(manager.page_index)  # uncomment to print out your page index to see whether it looks right.
     while True:
         search_term = input("Enter a word to search for: ")
         response: List[Tuple[int,List[int]]] = manager.search_for_word(search_term)
